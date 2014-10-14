@@ -1,0 +1,266 @@
+<HTML>
+<HEAD>
+<TITLE>Fuel costs calculator</TITLE>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+
+<SCRIPT LANGUAGE="JAVASCRIPT" TYPE="TEXT/JAVASCRIPT">
+<!--
+	function calculateConsumption() {
+		var result = -1;
+		var literCostField = document.getElementById("liter_cost");
+		var consumptionField = document.getElementById("consumption");
+		var distanceField = document.getElementById("distance");
+		var resultField = document.getElementById("consumption_result");
+		resultField.value = "";
+		var param=1;
+		try {
+			var price = parseFloat(literCostField.value);
+			if (price+''=='NaN') {	throw ('liter cost field'); }
+			var consumption = parseFloat(consumptionField.value);
+			if (consumption+''=='NaN') {	throw ('consumption field'); }
+			var distance = parseFloat(distanceField.value);
+			if (distance+''=='NaN') {	throw ('distance field'); }
+			result = (price * consumption * distance) / 100;
+			resultField.value = ""+result;
+		} catch (err) {
+			var message = "You should enter a numeric value here. \n ( "+err+" is not a number ) ";
+			alert(message);
+		}
+
+
+	}
+	function roundVal(val){
+		var dec = 3;
+		var result = Math.round(val*Math.pow(10,dec))/Math.pow(10,dec);
+		return result;
+	}
+	function calculateConsumptionVariable() {
+		var result = -1;
+		var literCostField = document.getElementById("liter_cost_v");
+		var consumptionField = document.getElementById("consumption_v");
+		var distanceField = document.getElementById("distance_v");
+		var cdField = document.getElementById("consumption_result_v");
+		var option = document.getElementById("select_variable").value;
+		var people = document.getElementById("select_people").value;
+		var cdpField = document.getElementById("consum_pp");
+		literCostField.style.background = "";
+		consumptionField.style.background = "";
+		distanceField.style.background = "";
+		cdField.style.background = "";
+
+
+		switch(option) {
+			case "123": resultField = cdField; break;
+			case "134": resultField = consumptionField; break;
+			case "124": resultField = distanceField; break;
+			case "234": resultField = literCostField; break;
+		}
+		resultField.value = "";
+		var param=1;
+		try {
+			var price = parseFloat(literCostField.value);
+			if (option.indexOf("1")>-1 && price+''=='NaN') {	throw ('liter cost field'); }
+			if (option.indexOf("1")>-1) param*= price;
+			var consumption = parseFloat(consumptionField.value);
+			if (option.indexOf("2")>-1 && consumption+''=='NaN') {	throw ('consumption field'); }
+			if (option.indexOf("2")>-1) param*= consumption;
+			var distance = parseFloat(distanceField.value);
+			if (option.indexOf("3")>-1 && distance+''=='NaN') {	throw ('distance field'); }
+			if (option.indexOf("3")>-1) param*= distance;
+			var cd = parseFloat(cdField.value);
+			if (option.indexOf("4")>-1 && cd+''=='NaN') {	throw ('consumption for distance field'); }
+
+			if (option.indexOf("4")>-1)
+				result = (100*cd)/param;
+			else
+				result = (param) / 100;
+			resultField.value = ""+roundVal(result);
+			resultField.style.background = "#EEEECC";
+			cdpField.value = roundVal( parseFloat(cdField.value) / parseFloat(people) );
+			
+		} catch (err) {
+			var message = "You should enter a numeric value here. \n ( "+err+" is not a number ) ";
+			alert(message);
+		}
+	}
+	function enableIframe() {
+		document.getElementById("gm_iframe").src = document.getElementById("gm_link").href;
+		/*alert("source will be \n" + document.getElementById("gm_link").href);*/
+		document.getElementById("iframe_address").value = document.getElementById("gm_link").href;
+
+		document.getElementById("iframe_div").style.display = "";
+		/*alert("shoul be displayed");*/
+	}
+	function changeIframeSrc() {
+		document.getElementById("gm_iframe").src=document.getElementById("iframe_address").value;
+	}
+	function hideIframe() {
+		document.getElementById("gm_iframe").style.display="none";
+	}
+	function showIframe() {
+		document.getElementById("gm_iframe").style.display="";
+	}
+	function disableIframe() {
+		document.getElementById("gm_iframe").src = "about:blank";
+		document.getElementById("iframe_address").value = "about:blank";
+		document.getElementById("iframe_div").style.display="none";
+	}
+
+//-->
+
+</script>
+</HEAD>
+<BODY>
+<br/><br/>
+<table cellpadding=4 cellspacing=1 border=0 align=center>
+<form id="ccv_form" action="" method="post" onsubmit="calculateConsumptionVariable(); return false;">
+ <tr>
+  <td> P - preţ / litru</td><td><input type="text" maxlen="5" size="6" value="6.3" id="liter_cost_v" > lei </td><td>Cât costă un litru</td><td> &nbsp; </td>
+   <td valign="right"> <a href="http://www.ghidtransport.ro/stiri/pret-benzina-motorina.html" target="_blank">Vezi preţurile la carburanţi</a></td>
+ </tr>
+ <tr>
+  <td> C - consum </td><td><input type="text" maxlen="4" size="6" value="6.58" id="consumption_v" > l / 100 km </td><td>Cât crezi că va consuma maşina la suta de kilometri</td><td> &nbsp; </td>
+   <td valign="right"> </td>
+ </tr>
+ <tr>
+  <td> D - distanţă </td><td><input type="text" maxlen="6" size="6" value="100" id="distance_v" > km </td><td>Pentru ce distanţă vrei să calculezi costurile de carburant</td><td> &nbsp; </td>
+   <td valign="right"> </td>
+ </tr>
+  <tr>
+   <td> PCD - cost combustibil</td><td><input type="text" maxlen="6" size="6" value="41.45" id="consumption_result_v" > lei </td><td>(bani disponibili pentru combustibil)</td><td> &nbsp; </td>
+    <td align="right">&nbsp; &nbsp; &nbsp; &nbsp; </td>
+  </tr>
+  <tr>
+   <td >Calculează variabila</td><td colspan="2">
+   		<select id="select_variable">
+   			<option value="123" >PCD - preţul combustibilului pentru distanţa dată</option>
+   			<option value="124" >D - distanţă</option>
+   			<option value="134" >C - consum</option>
+   			<option value="234" >P - preţ / litru</option>
+   		</select>
+   		 &nbsp; <input type="submit" value="Calculează rezultatul" /></td><td> &nbsp; </td>
+    <td valign="right"> &nbsp; &nbsp; &nbsp; <input type="reset"  value="Resetează parametrii"  style="height: 20px; font-size: 8pt; "/></td>
+  </tr>
+  <tr>
+    <td> Persoane in masina</td>
+    <td><select id="select_people">
+   			<option value="1" >1</option>
+   			<option value="2" >2</option>
+   			<option value="3" >3</option>
+   			<option value="4" >4</option>
+   			<option value="5" >5</option>
+   		</select> </td>
+    <td><input type="text" maxlen="6" size="6" value="41.45" id="consum_pp" > lei</td><td> &nbsp; </td>
+    <td align="right">&nbsp; &nbsp; &nbsp; &nbsp; </td>
+  </tr>
+</form>
+ <tr>
+  <td colspan="10">Calculează distanţa parcursă pe pagina  &nbsp; &nbsp;
+    <b><a href="http://maps.google.ro/maps?saddr=Strada+S%C3%A2rguintei&daddr=46.5419911,24.5660123+to:Pia%C5%A3a+Republicii+to:46.54903,24.56969+to:Strada+Po%C8%99tei+to:Pia%C5%A3a+Republicii+to:Pia%C5%A3a+Republicii%2FDN15+to:46.549082,24.5646287+to:46.5416681,24.5659832+to:Strada+S%C3%A2rguintei&hl=ro&ie=UTF8&ll=46.543395,24.575515&spn=0.024854,0.066047&sll=46.545403,24.565902&sspn=0.024853,0.066047&geocode=FZQHxgIdHih3AQ%3BFacsxgId_Nh2ASktTnflSrZLRzHZnGlyGIKDXQ%3BFRlUxgIdtth2AQ%3BFSZIxgIdWud2ASmthLMFSLZLRzGsSwROlzqm_w%3BFbY-xgIdvNN2AQ%3BFXhTxgIdQ9h2AQ%3BFY9TxgIdBdt2AQ%3BFVpIxgIdlNN2ASkxTF8MN7ZLRzGacSXNuh9Rbg%3BFWQrxgId39h2ASkDGBrmSrZLRzHULB40WI4OjA%3BFWgHxgIdoih3AQ&vpsrc=0&mra=ls&via=1,3,7,8&t=h&z=15"  target="_blank">Google Maps</a> &nbsp;</b>
+   	 <!--&nbsp;  şi  &nbsp; &nbsp; -->
+	 <a style="display:none" href="http://link2.map24.com/?lid=32a3e713&maptype=&action=route&width=&rtype=fast&s=S%C3%A2rguin%C5%A3ei%2C+T%C3%A2rgu+Mure%C5%9F%2C+Rom%C3%A2nia&scountry=RO&d=Primariei%2C+T%C3%A2rgu+Mure%C5%9F%2C+Rom%C3%A2nia&dcountry=RO" target="_blank">NAVTEQ Map24</a></td>
+ </tr>
+
+</table>
+<center>
+<br/>
+<a href="javascript: enableIframe();"  style="display:none">Calculează distanţa parcursă cu Google Maps în această pagină</a>
+<div id="iframe_div" style="display:none">
+	<iframe id="gm_iframe" width="850" height="580" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="about:blank"></iframe>
+	<br /><small><a id="gm_link" href="http://maps.google.ro/maps?saddr=Strada+S%C3%A2rguintei&amp;daddr=46.5419911,24.5660123+to:Pia%C5%A3a+Republicii+to:46.54903,24.56969+to:Strada+Po%C8%99tei+to:Pia%C5%A3a+Republicii+to:Pia%C5%A3a+Republicii%2FDN15+to:46.5490819,24.5646286+to:46.5416681,24.5659832+to:Strada+S%C3%A2rguintei&amp;hl=ro&amp;ie=UTF8&amp;sll=46.545403,24.565902&amp;sspn=0.024853,0.066047&amp;geocode=FZQHxgIdHih3AQ%3BFacsxgId_Nh2ASktTnflSrZLRzHZnGlyGIKDXQ%3BFRlUxgIdtth2AQ%3BFSZIxgIdWud2ASmthLMFSLZLRzGsSwROlzqm_w%3BFbY-xgIdvNN2AQ%3BFXhTxgIdQ9h2AQ%3BFY9TxgIdBdt2AQ%3BFVlIxgIdlNN2ASkxTF8MN7ZLRzGacSXNuh9Rbg%3BFWQrxgId39h2ASkDGBrmSrZLRzHULB40WI4OjA%3BFWgHxgIdoih3AQ&amp;vpsrc=6&amp;mra=ls&amp;via=1,3,7,8&amp;t=h&amp;ll=46.543395,24.575515&amp;spn=0.024854,0.066047&amp;output=embed">View Larger Map</a></small>
+	<br/><input type="text" size="86" id="iframe_address" value="" > <input type="button" value="go" onclick="changeIframeSrc();" />
+	<br/><a href="javascript: hideIframe();" >ascunde zona Google Maps</a>
+		 &nbsp; &nbsp; <a href="javascript: showIframe();" >arată zona Google Maps</a>
+		 &nbsp; &nbsp; <a href="javascript: disableIframe();" >dezactivează zona Google Maps</a>
+</div>
+</center>
+<br/><br/>
+
+<br/><br/>
+<table cellpadding=4 cellspacing=1 border=0 >
+ <tr>
+  <td></td>
+ </tr>
+</table>
+<br/><br/>
+<br/><br/>
+<br/><br/>
+
+<table cellpadding=4 cellspacing=1 border=0 align=center style="font-size: small; font-family: arial, tahoma, verdana, sans;" >
+<form id="cc_form" action="" method="post" onsubmit="calculateConsumption(); return false;">
+ <tr>
+  <td>Cât costă un litru:</td><td><input type="text" maxlen="5" size="6" value="4.3" id="liter_cost" > lei </td><td> &nbsp; </td>
+   <td valign="right">&nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.ghidtransport.ro/stiri/pret-benzina-motorina.html" target="_blank">Vezi preţurile la carburanţi</a></td>
+ </tr>
+ <tr>
+  <td>Cât crezi că va consuma maşina la suta de kilometri:</td><td><input type="text" maxlen="4" size="6" value="7.58" id="consumption" ></td><td> &nbsp; </td>
+   <td valign="right">&nbsp; &nbsp; &nbsp; &nbsp; </td>
+ </tr>
+ <tr>
+  <td>Pentru ce distanţă vrei să calculezi costurile de carburant:</td><td><input type="text" maxlen="6" size="6" value="100.001" id="distance" ></td><td> &nbsp; </td>
+   <td valign="right">&nbsp; &nbsp; &nbsp; &nbsp; </td>
+ </tr>
+  <tr>
+   <td align="right"><input type="submit" value="Calculează rezultatul" /></td><td> &nbsp; </td><td> &nbsp; </td>
+    <td valign="right">&nbsp; &nbsp; &nbsp; &nbsp; <input type="reset"  value="Resetează parametrii" /></td>
+  </tr>
+  <tr>
+   <td>Rezultatul este:</td><td><input type="text" maxlen="6" size="6" value="" id="consumption_result" readonly=readonly > lei </td><td> &nbsp; </td>
+    <td align="right">&nbsp; &nbsp; &nbsp; &nbsp; </td>
+  </tr>
+  <tr>
+    <td colspan="10"><br/><br/><table cellpadding=4 cellspacing=1 border=0  >
+		 <tr>
+		  <th colspan="20">Calculul efectuat e simplu (regula de 3 simpla): </td>
+		 </tr>
+		 <tr>
+		 	<td>consum estimat la suta de kilometri</td><td>...</td><td>100 km </td><td> </td><td> C </td><td>...</td><td> 100 </td><td>\</td><td align="center">D * C</td>
+		 </tr>
+		 <tr>
+		 	<td> </td><td> </td><td> </td><td> &lt;=&gt; </td><td> </td><td> </td><td> </td><td> &nbsp;&nbsp;| =&gt; &nbsp; &nbsp; CR = &nbsp;</td><td align="center">----------</td>
+		 </tr>
+		 <tr>
+		 	<td>consum rezultat la distanţa dată</td><td>...</td><td>distanţa dată</td><td> </td><td> CR </td><td>...</td><td> D </td><td>/</td><td align="center">100</td>
+		 </tr>
+		 <tr>
+		 	<td colspan="20"><br/>Costul combustibilului pentru distanţa dată = consumul rezultat la distanţa dată * preţul unui litru &nbsp;&nbsp; &lt;=&gt; &nbsp;&nbsp; CC = CR * P </td>
+		 </tr>
+		 <tr>
+			<td> </td>	<td> </td>					<td align="center"> D * C * P </td>
+		 </tr>
+		 <tr>
+			<td> </td>	<td> =&gt; &nbsp; CC = </td>	<td align="center">--------------</td>
+		 </tr>
+		 <tr>
+			<td></td>	<td> </td>						<td align="center">100</td>
+		 </tr>
+	</table></td>
+  </tr>
+</form>
+</table>
+<br/><br/>
+
+
+
+
+
+
+<br/><br/>
+<br/><br/>
+<br/><br/>
+Learned and inspired from:
+<br/>
+<a href="http://www.w3schools.com/jsref/jsref_parseFloat.asp" target="_blank">
+JavaScript parseFloat() Function
+</a>
+<br/>
+<a href="http://forums.devarticles.com/javascript-development-22/javascript-to-round-to-2-decimal-places-36190.html" target="_blank">
+Javascript to Round to 2 Decimal Places
+</a>
+<SCRIPT LANGUAGE="JAVASCRIPT" TYPE="TEXT/JAVASCRIPT">
+//	setRespondWithAlert();
+//	setListSeparator();
+//	setOrderList();
+</SCRIPT>
+</BODY>
+</HTML>
