@@ -1,0 +1,351 @@
+<HTML>
+<HEAD>
+<TITLE>Random Number Generator in JavaScript</TITLE>
+<SCRIPT LANGUAGE="JAVASCRIPT" TYPE="TEXT/JAVASCRIPT">
+<!--
+	function genRandom50() {
+		var rand_no = Math.floor((50+1)*Math.random());
+		alert(rand_no);
+	}
+
+	var respondWithAlert = false;
+
+	function setRespondWithAlert() {
+		respondWithAlert = document.getElementById('alertRes').checked;
+		//alert(respondWithAlert);
+	}
+	function genRandom0to() {
+		try {
+			var i = 1;
+			i = document.getElementById('gen0to').value;
+			//alert(i + ' ' + (i+1) );
+			var nr = parseInt(i);
+			if (nr+''=='NaN') {
+				throw ('Not a Number');
+			}
+			var rand_no = Math.floor((nr+1)*Math.random());
+			document.getElementById('show0toRes').style.display = '';
+			document.getElementById('gen0toRes').innerHTML = ''+rand_no;
+			if (respondWithAlert) alert(rand_no);
+		} catch (err) {
+			alert("You should enter a numeric value here. \n ( "+err+" )");
+		}
+	}
+
+	function genRandom1to() {
+		try {
+			var i = 1;
+			i = document.getElementById('gen1to').value;
+			//alert(i + ' ' + (i+1) );
+			var nr = parseInt(i);
+			if (nr+''=='NaN') {
+				throw ('Not a Number');
+			}
+			var rand_no = Math.floor((nr)*Math.random())+1;
+			document.getElementById('show1toRes').style.display = '';
+			document.getElementById('gen1toRes').innerHTML = ''+rand_no;
+			if (respondWithAlert) alert(rand_no);
+		} catch (err) {
+			alert("You should enter a numeric value here. \n ( "+err+" )");
+		}
+	}
+
+	function genRandomFromTo() {
+		try {
+			var nr = parseInt(document.getElementById('genTo').value);
+			if (nr+''=='NaN') {
+				throw ('Not a Number');
+			}
+			var nr2 = parseInt(document.getElementById('genFrom').value);
+			if (nr2+''=='NaN') {
+				throw ('Not a Number');
+			}
+			var from = nr2;
+			var to = nr;
+			//alert(from + ' ' + (to) + ' \n' + (to+1-from) + ' ' + (to) );
+			var rand_no = Math.floor((to-from+1)*Math.random())+from;
+			document.getElementById('showFromToRes').style.display = '';
+			document.getElementById('genFromToRes').innerHTML = ''+rand_no;
+			if (respondWithAlert) alert(rand_no);
+		} catch (err) {
+			alert("You should enter a numeric value here. \n ( "+err+" )");
+		}
+	}
+
+	var listSeparator = ", ";
+
+	function setListSeparator() {
+		listSeparator = document.getElementById('list_separator').value;
+		//alert(respondWithAlert);
+	}
+
+	function genRandomNsFromTo() {
+		try {
+			var nr3 = parseInt(document.getElementById('genNs').value);
+			if (nr3+''=='NaN') {
+				throw ('Not a Number');
+			}
+			var nr = parseInt(document.getElementById('genNsTo').value);
+			if (nr+''=='NaN') {
+				throw ('Not a Number');
+			}
+			var nr2 = parseInt(document.getElementById('genNsFrom').value);
+			if (nr2+''=='NaN') {
+				throw ('Not a Number');
+			}
+			var from = nr2;
+			var to = nr;
+			var responses = nr3;
+			var msg = "";
+			var res = "";
+			var reL = "";
+			var lsm = "";
+			var lsr = "";
+			if (listSeparator=="nl") {
+				lsm = "\n";
+				lsr = "<br/>";
+			} else {
+				lsm = listSeparator;
+				lsr = listSeparator;
+			}
+			var i = -1;
+			for (i=0; i<responses-1; i++) {
+				var rand_no = Math.floor((to-from+1)*Math.random())+from;
+				msg = msg+rand_no+lsm;
+				res = res+rand_no+lsr;
+				reL = reL+String.fromCharCode(rand_no)+lsr;
+			}
+			var rand_no = Math.floor((to-from+1)*Math.random())+from;
+			msg = msg+rand_no;
+			res = res+rand_no;
+			reL = reL+String.fromCharCode(rand_no);
+			if (listSeparator=="nl") {
+				res = lsr+res+lsr;
+				reL = lsr+reL+lsr;
+			}
+			document.getElementById('showNsFromToRes').style.display = '';
+			document.getElementById('genNsFromToRes').innerHTML = res+"<br/>"+reL;
+			if (respondWithAlert) alert(msg);
+		} catch (err) {
+			alert("You should enter a numeric value here. \n ( "+err+" )");
+		}
+	}
+
+
+	var orderList = false;
+
+	function setOrderList() {
+		orderList = document.getElementById('order_list').checked;
+	}
+
+	function sortNumber(a, b) {
+		return a - b;
+	}
+
+	function genRandomDNrsFromTo() {
+		try {
+			var nr3 = parseInt(document.getElementById('genDNrs').value);
+			if (nr3+''=='NaN') {
+				throw ('Not a Number');
+			}
+			var nr = parseInt(document.getElementById('genDNrsTo').value);
+			if (nr+''=='NaN') {
+				throw ('Not a Number');
+			}
+			var nr2 = parseInt(document.getElementById('genDNrsFrom').value);
+			if (nr2+''=='NaN') {
+				throw ('Not a Number');
+			}
+			var from = nr2;
+			var to = nr;
+			var responses = nr3;
+			if (responses > to - from +1) {
+				throw (" Can't generate more distinct numbers than the difference ");
+			}
+			var msg = "";
+			var res = "";
+			var lsm = "";
+			var lsr = "";
+			if (listSeparator=="nl") {
+				lsm = "\n";
+				lsr = "<br/>";
+			} else {
+				lsm = listSeparator;
+				lsr = listSeparator;
+			}
+			var i = -1;
+			var j = -1;
+			var k = -1;
+			var a = new Array();
+			var found = false;
+			for (i=0; i<responses; i++) {
+				var rand_no = -1;
+				do {
+					found = false;
+					rand_no = Math.floor((to-from+1)*Math.random())+from;
+					for (j =0; j<a.length && !found ; j++) {
+						if (rand_no == a[j]) {
+							found = true;
+						}
+					}
+				} while (found);
+
+				a[i] = rand_no;
+			}
+			if (orderList) {
+				a.sort(sortNumber);
+			}
+			for (i=0; i<responses; i++) {
+				msg = msg+a[i]+(i<responses-1?lsm:'');
+				res = res+a[i]+(i<responses-1?lsr:'');
+			}
+			if (listSeparator=="nl") {
+				res = lsr+res+lsr;
+			}
+			document.getElementById('showDNrsFromToRes').style.display = '';
+			document.getElementById('genDNrsFromToRes').innerHTML = res;
+			if (respondWithAlert) alert(msg);
+		} catch (err) {
+			alert("You should enter an appropriate numeric value here. \n ( "+err+" )");
+		}
+	}
+	function hexa2(deca) {
+		//alert(deca);
+		var a = Math.floor(deca / 16);
+		//alert(a);
+		var b = deca % 16;
+		//alert(b);
+		var res = "";
+		if (a<=9) {
+			res = res+a;
+		} else {
+			switch(a) {
+				case 10: res = res+"A"; break;
+				case 11: res = res+"B"; break;
+				case 12: res = res+"C"; break;
+				case 13: res = res+"D"; break;
+				case 14: res = res+"E"; break;
+				case 15: res = res+"F"; break;
+				default: res = res+"G";
+			}
+		}
+		//alert(res);
+		if (b<=9) {
+			res = res+b;
+		} else {
+			switch(b) {
+				case 10: res = res+"A"; break;
+				case 11: res = res+"B"; break;
+				case 12: res = res+"C"; break;
+				case 13: res = res+"D"; break;
+				case 14: res = res+"E"; break;
+				case 15: res = res+"F"; break;
+				default: res = res+"G";
+			}
+		}
+		alert("input is "+deca+"\noutput is  '"+res+"'");
+		return res;
+	}
+	//hexa2(125);
+//-->
+</script>
+</HEAD>
+<BODY>
+
+
+<form id="FgenRandom1to" name="FgenRandom1to" action="" method="get" onsubmit=" genRandom1to(); return false;">
+Generate a random number between 1 and
+<input type="text" maxlen="9" size="9" value="6" id="gen1to" >
+&nbsp; <a href="#" onclick=" genRandom1to(); return false;">now</a>
+&nbsp; &nbsp; &nbsp; <span id="show1toRes" style="display: none; "> ( Last result was: <span id="gen1toRes"></span> ) </span>
+</form>
+
+<br/><br/>
+List separators:
+<select id="list_separator" onchange="setListSeparator(); return true;">
+	<option value=", " selected="selected" > comma+space (, ) </option>
+	<option value=""> nothing () </option>
+	<option value=" "> space ( ) </option>
+	<option value=","> comma (,) </option>
+	<option value="; "> semicolon+space (; ) </option>
+	<option value=";"> semicolon (;) </option>
+	<option value="nl"> new line </option>
+</select>
+
+<br/><br/>
+<input type="checkbox" id="order_list" onclick="setOrderList(); return true;" checked="checked" > Order list
+<br/><br/>
+<form id="FgenRandomDNrsFromTo" name="FgenRandomDNrsFromTo" action="" method="get" onsubmit=" genRandomDNrsFromTo(); return false;">
+Generate
+<input type="text" maxlen="3" size="3" value="6" id="genDNrs" >
+distinct numbers between
+<input type="text" maxlen="9" size="9" value="1" id="genDNrsFrom" >
+ and
+<input type="text" maxlen="9" size="9" value="49" id="genDNrsTo" >
+&nbsp; <a href="#" onclick=" genRandomDNrsFromTo(); return false;">now</a>
+<span id="showDNrsFromToRes" style="display: none; "><br/> &nbsp; &nbsp; &nbsp; ( Last result was: <span id="genDNrsFromToRes"></span> ) </span>
+<input type="submit" style="display:none" value="now" />
+</form>
+
+
+<br/><br/>
+
+<br/><br/>
+<a href="#" onclick=" genRandom50(); return false;">Click to generate a random number between 0 and 50.</a>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <input type="checkbox" id="alertRes" onclick="setRespondWithAlert(); return true;" > Alert with the result for all queries
+<br/><br/>
+<form action="" method="get" onsubmit=" genRandom0to(); return false;">
+<input type="submit" style="display:none" value="now" />
+Generate a random number between 0 and
+<input type="text" maxlen="9" size="9" value="21" id="gen0to" >
+&nbsp; <a href="#" onclick=" genRandom0to(); return false;">now</a>
+&nbsp; &nbsp; &nbsp; <span id="show0toRes" style="display: none; "> ( Last result was: <span id="gen0toRes"></span> ) </span>
+</form>
+
+<br/><br/>
+<form action="" method="get" onsubmit=" genRandomFromTo(); return false;">
+<input type="submit" style="display:none" value="now" />
+Generate a random number between
+<input type="text" maxlen="9" size="9" value="52" id="genFrom" >
+ and
+<input type="text" maxlen="9" size="9" value="80" id="genTo" >
+&nbsp; <a href="#" onclick=" genRandomFromTo(); return false;">now</a>
+&nbsp; &nbsp; &nbsp; <span id="showFromToRes" style="display: none; "> ( Last result was: <span id="genFromToRes"></span> ) </span>
+</form>
+
+<br/><br/>
+
+
+<br/><br/>
+<form action="" method="get" onsubmit=" genRandomNsFromTo(); return false;">
+<input type="submit" style="display:none" value="now" />
+Generate
+<input type="text" maxlen="3" size="3" value="40" id="genNs" >
+numbers between
+<input type="text" maxlen="9" size="9" value="97" id="genNsFrom" >
+ and
+<input type="text" maxlen="9" size="9" value="122" id="genNsTo" >
+&nbsp; <a href="#" onclick=" genRandomNsFromTo(); return false;">now</a>
+<span id="showNsFromToRes" style="display: none; "><br/> &nbsp; &nbsp; &nbsp; ( Last result was: <span id="genNsFromToRes"></span> ) </span>
+</form>
+
+
+<br/><br/>
+<br/><br/>
+<br/><br/>
+Learned and inspired from:
+<br/>
+<a href="http://www.webdevelopersnotes.com/tutorials/javascript/generating_random_numbers_javascript.php3" target="_blank">
+generating random numbers in javascript - javascript random numbers calculations and methods
+</a>
+<br/>
+<a href="http://www.w3schools.com/jsref/jsref_sort.asp" target="_blank">
+JavaScript sort() Method
+</a>
+<SCRIPT LANGUAGE="JAVASCRIPT" TYPE="TEXT/JAVASCRIPT">
+	setRespondWithAlert();
+	setListSeparator();
+	setOrderList();
+</SCRIPT>
+</BODY>
+</HTML>
