@@ -1,0 +1,221 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- The HTML 4.01 Transitional DOCTYPE declaration-->
+<!-- above set at the top of the file will set     -->
+<!-- the browser's rendering engine into           -->
+<!-- "Quirks Mode". Replacing this declaration     -->
+<!-- with a "Standards Mode" doctype is supported, -->
+<!-- but may lead to some differences in layout.   -->
+
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>Program scurt CinemaCity TgMures</title>
+	
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>	
+<SCRIPT LANGUAGE="JAVASCRIPT" TYPE="TEXT/JAVASCRIPT">
+<!--
+	var d = new Date();
+    var t = d.getTime();
+	var aDay = 1000 * 60 * 60 * 24;
+	var yesterdayTime = t - aDay;
+	var initDone = false;
+
+	function initPage() {
+		updateFields();
+		initDone = true;
+	}
+	
+	function updateFields() {
+		updatePreviousButtonState();	
+		document.getElementById("current_day").innerHTML = d.toDateString();
+		setDateField();
+	}
+	
+	function updatePreviousButtonState() {
+		if (t - aDay <= yesterdayTime) {
+			//alert('disable prev');
+			document.getElementById("previous_day").style.display = "none";
+		} else {
+			//alert('enable prev');
+			document.getElementById("previous_day").style.display = "";
+		}
+	}
+	
+	function prev() {
+		if (t - aDay <= yesterdayTime) {
+			return;
+		}
+		//alert('prev');
+		t = t - aDay;
+		d.setTime(t);
+		
+		updateFields();
+	}
+	
+	function next() {
+		//alert('next');
+		t = t + aDay;
+		d.setTime(t);
+		
+		updateFields();
+	}
+	
+	function reload() {
+		setDateField();
+	}
+	
+	function setDateField() {
+		var today = d;
+		var dd = today.getDate();
+		var mm = today.getMonth()+1; //January is 0!
+		var yyyy = today.getFullYear();
+
+		if(dd<10) {
+			dd='0'+dd
+		} 
+
+		if(mm<10) {
+			mm='0'+mm
+		} 
+
+		var todayText = dd+'/'+mm+'/'+yyyy;
+		document.getElementById("schedule_date").value = todayText;
+		var location = document.getElementById("locations_").value;
+		
+		//alert('loading schedule for '+todayText);
+		var x = document.getElementById("data_load");
+		x.src="http://www.cinemacity.ro/scheduleInfo?locationId=" + location + "&venueTypeId=1&hideSite=false&date=" + todayText;
+		
+	}
+	
+	function loadSchedule() {
+		/*
+		alert('loading schedule for '+today);
+		var x = document.getElementById("data_load");
+		x.src="http://www.cinemacity.ro/scheduleInfoRows"
+		*/
+		
+		setDateField();
+		return false;
+	}
+	
+	function loadTheData(){
+		return;
+		
+	}
+	
+	//javascript:openFancyBoxExternal('http://www.youtube.com/embed/i_D3mmvJCxg?autoplay=1&showinfo=0',function(){   openFeatureInfo('1443S2R',true, 790, 460, null);});
+	function openFancyBoxExternal(embedURL, openFeatureInfoFunction) {
+	alert('openFancyBoxExternal (' + embedURL + ')');
+		document.getElementById("trailer_load").src = embedURL;
+	}
+	
+	function loadTrailer(){
+		var funtionText = document.getElementById("function_text").value;
+		var idx = funtionText.indexOf("http");
+		if (idx<0) {
+			return false;
+		}
+		var embedURL = funtionText.substr(idx);
+		var end = embedURL.indexOf("'");
+		if (end<0) {
+			end = embedURL.length;
+		}
+		embedURL = embedURL.substr(0, end);
+		//alert('trailer_load (' + embedURL + ')');
+		document.getElementById("trailer_load").src = embedURL;
+		document.getElementById("function_text").value = embedURL;
+		return false;
+	}
+//-->
+
+</script>
+
+  </head>
+
+  <body onLoad="initPage()">
+
+  
+
+  <center>
+	<a id="previous_day" href="javascript:prev();">&lt;&lt;</a>  &nbsp; &nbsp;
+		<b><span id="current_day"></span></b> &nbsp; &nbsp;
+	<a id="next_day" href="javascript:next();">&gt;&gt;</a>
+		<form id="data_form" name="data_form" target="data_load" method="POST" action="http://www.cinemacity.ro/scheduleInfoRows" onsubmit="return loadSchedule();">
+		<input type="text" id="schedule_date" name="date" value="05/03/2016"/>
+		<input type="hidden" name="hideSite" value="false"/>
+		<!-- <input type="hidden" name="locationId" value="1010714"/> -->
+		
+        
+        <select name="locationId" id="locations_" >
+            
+            <option value="1010714" selected="selected" data-tic_url="{&quot;template&quot;:&quot;ticketing/ro/selectTicketingUrl.html&quot;,&quot;overrideTemplate&quot;:{&quot;date&quot;:&quot;14/02/2013&quot;,&quot;template&quot;:&quot;ticketing/ro/selectTicketingUrlValentineDay.html&quot;},&quot;ticketUrls&quot;:[{&quot;ticketUrl&quot;:&quot;http://www.cinemacity-rom.ro/webtixsnet/?key=targumures&amp;EC=$PrsntCode$&quot;},{&quot;ticketUrl&quot;:&quot;http://www.cinemacity-rom.ro/webtixsnet/?key=targumuresP&amp;EC=$PrsntCode$&quot;}]}">Targu Mures</option>
+            
+            <option value="1010712" >Cluj Polus</option>
+            
+            <option value="1010707" >Cluj Iulius Mall</option>
+            
+            <option value="1010702" >Arad Atrium</option>
+            
+            <option value="1010703" >Arad Galleria</option>
+            
+            <option value="1010704" >Bacau</option>
+            
+            <option value="1010705" >Baia Mare</option>
+            
+            <option value="1010706" >Braila</option>
+            
+            <option value="1010708" data-tic_url="{&quot;template&quot;:&quot;ticketing/ro/selectTicketingUrl.html&quot;,&quot;overrideTemplate&quot;:{&quot;date&quot;:&quot;14/02/2013&quot;,&quot;template&quot;:&quot;ticketing/ro/selectTicketingUrlValentineDay.html&quot;},&quot;ticketUrls&quot;:[{&quot;ticketUrl&quot;:&quot;http://www.cinemacity-rom.ro/webtixsnet/?key=cotroceni&amp;EC=$PrsntCode$&quot;},{&quot;ticketUrl&quot;:&quot;http://www.cinemacity-rom.ro/webtixsnet/?key=cotroceniP&amp;EC=$PrsntCode$&quot;}]}">Bucuresti AFI</option>
+            <!--
+            <option value="1010708_2" data-tic_url="{&quot;template&quot;:&quot;ticketing/ro/selectTicketingUrl.html&quot;,&quot;overrideTemplate&quot;:{&quot;date&quot;:&quot;14/02/2013&quot;,&quot;template&quot;:&quot;ticketing/ro/selectTicketingUrlValentineDay.html&quot;},&quot;ticketUrls&quot;:[{&quot;ticketUrl&quot;:&quot;http://www.cinemacity-rom.ro/webtixsnet/?key=cotroceni&amp;EC=$PrsntCode$&quot;},{&quot;ticketUrl&quot;:&quot;http://www.cinemacity-rom.ro/webtixsnet/?key=cotroceniP&amp;EC=$PrsntCode$&quot;}]}">Bucuresti AFI (T IMAX)</option>
+            
+            <option value="1010708_3" data-tic_url="{&quot;template&quot;:&quot;ticketing/ro/selectTicketingUrl.html&quot;,&quot;overrideTemplate&quot;:{&quot;date&quot;:&quot;14/02/2013&quot;,&quot;template&quot;:&quot;ticketing/ro/selectTicketingUrlValentineDay.html&quot;},&quot;ticketUrls&quot;:[{&quot;ticketUrl&quot;:&quot;http://www.cinemacity-rom.ro/webtixsnet/?key=cotroceni&amp;EC=$PrsntCode$&quot;},{&quot;ticketUrl&quot;:&quot;http://www.cinemacity-rom.ro/webtixsnet/?key=cotroceniP&amp;EC=$PrsntCode$&quot;}]}">Bucuresti AFI (VIP)</option>
+            -->
+            <option value="1010718" >Bucuresti Mega Mall</option>
+            
+            <option value="1010718" data-tic_url="{&quot;template&quot;:&quot;ticketing/ro/selectTicketingUrl.html&quot;,&quot;overrideTemplate&quot;:{&quot;date&quot;:&quot;14/02/2013&quot;,&quot;template&quot;:&quot;ticketing/ro/selectTicketingUrlValentineDay.html&quot;},&quot;ticketUrls&quot;:[{&quot;ticketUrl&quot;:&quot;http://www.cinemacity-rom.ro/webtixsnet/?key=MegaMall&amp;EC=$PrsntCode$&quot;},{&quot;ticketUrl&quot;:&quot;http://www.cinemacity-rom.ro/webtixsnet/?key=MegaMallP&amp;EC=$PrsntCode$&quot;}]}">Bucuresti Mega Mall (4DX)</option>
+            
+            <option value="1010713" >Bucuresti Sun Plaza</option>
+            
+            <option value="1010719" >Constanta City Park</option>
+            <!--
+            <option value="1010719_5" data-tic_url="{&quot;template&quot;:&quot;ticketing/ro/selectTicketingUrl.html&quot;,&quot;overrideTemplate&quot;:{&quot;date&quot;:&quot;14/02/2013&quot;,&quot;template&quot;:&quot;ticketing/ro/selectTicketingUrlValentineDay.html&quot;},&quot;ticketUrls&quot;:[{&quot;ticketUrl&quot;:&quot;http://www.cinemacity-rom.ro/webtixsnet/?key=ConstantaCity&amp;EC=$PrsntCode$&quot;},{&quot;ticketUrl&quot;:&quot;http://www.cinemacity-rom.ro/webtixsnet/?key=ConstantaCityP&amp;EC=$PrsntCode$&quot;}]}">Constanta City Park (4DX)</option>
+            -->
+            <option value="1010701" >Constanta Maritimo</option>
+            
+            <option value="1010720" >Deva</option>
+            
+            <option value="1010721" >Drobeta Turnu Severin</option>
+            
+            <option value="1010709" >Iasi Iulius Mall</option>
+            
+            <option value="1010710" >Pitesti</option>
+            
+            <option value="1010716" >Ploiesti Afi Palace</option>
+            
+            <option value="1010711" >Ploiesti Shopping City</option>
+            
+            <option value="1010722" >Suceava</option>
+            
+            <option value="1010717" >Targu Jiu</option>
+            
+            <option value="1010715" >Timisoara Iulius Mall</option>
+            
+        </select>
+
+		<input type="hidden" name="venueTypeId" value="1"/>
+		<input type="submit" name="load_schedule">
+		</form>
+		<table border=0>
+		  <tr><td colspan="4"><a href="http://cinemacity.ro" target="_blank"> Cinema City Site </a></td></tr>
+		  <tr>
+		    <td><a id="previous_day" href="javascript:reload();"> &lt; Reload Schedule</a></td>
+		    <td><form onsubmit="return loadTrailer();" title="Copy link address from the trailer button and paste it here, then Load Trailer"><input type="text" size="80" maxlength="250" id="function_text" name="function_text" value="" /><input type="submit" value="Load Trailer" /></form> </td>
+		  </tr>
+		  <tr><td colspan="4"><iframe width="1024" height="640" id="data_load" src="about:blank" name="data_load" onload="loadTheData();"></iframe></td></tr>
+		</table>
+		<br/><br/>
+		<iframe width="800" height="500" id="trailer_load" src="about:blank" name="trailer_load"></iframe> <!--  style="display:none"  -->
+  </center>
+  </body>
+</html>
