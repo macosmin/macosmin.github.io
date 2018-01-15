@@ -34,6 +34,11 @@
 		var result = Math.round(val*Math.pow(10,dec))/Math.pow(10,dec);
 		return result;
 	}
+	function roundValTo0(val){
+		var dec = 0;
+		var result = Math.round(val*Math.pow(10,dec))/Math.pow(10,dec);
+		return result;
+	}
 	function calculateConsumptionVariable() {
 		var result = -1;
 		var literCostField = document.getElementById("liter_cost_v");
@@ -43,10 +48,11 @@
 		var option = document.getElementById("select_variable").value;
 		var people = document.getElementById("select_people").value;
 		var cdpField = document.getElementById("consum_pp");
-		literCostField.style.background = "";
-		consumptionField.style.background = "";
-		distanceField.style.background = "";
-		cdField.style.background = "";
+		var cdrField = document.getElementById("consum_ps");
+		cdField.style.background = "none";
+		consumptionField.style.background = "none";
+		distanceField.style.background = "none";
+		literCostField.style.background = "none";
 
 
 		switch(option) {
@@ -76,7 +82,16 @@
 				result = (param) / 100;
 			resultField.value = ""+roundVal(result);
 			resultField.style.background = "#EEEECC";
-			cdpField.value = roundVal( parseFloat(cdField.value) / parseFloat(people) );
+			var ppl = parseInt(people);
+			var split = parseFloat(cdField.value) / ppl;
+			ppProcent = people == '1' ? 0 : (110 - 1.5*(ppl-2))/100; //(100 + (parseFloat(people)-1)*10) / 100;
+			// 1.25: 2:18 3:15 4:12 5:10
+			// 2.25: 2:18 3:15 4:08 5:05
+			// 1.75: 2:18 3:15 4:12 5:10
+			// drProcent = (100 - (parseFloat(people)-1)*10) / 100;
+			cdpField.value = roundValTo0( split * ppProcent );
+			cdrField.value = roundVal( parseFloat(cdField.value) - cdpField.value * (ppl-1) );
+			document.getElementById("pas").innerHTML = "" + (ppl-1);
 			
 		} catch (err) {
 			var message = "You should enter a numeric value here. \n ( "+err+" is not a number ) ";
@@ -115,11 +130,11 @@
 <table cellpadding=4 cellspacing=1 border=0 align=center>
 <form id="ccv_form" action="" method="post" onsubmit="calculateConsumptionVariable(); return false;">
  <tr>
-  <td> P - preţ / litru</td><td><input type="text" maxlen="5" size="6" value="6.3" id="liter_cost_v" > lei </td><td>Cât costă un litru</td><td> &nbsp; </td>
+  <td> P - preţ / litru</td><td><input type="text" maxlen="5" size="6" value="6.0" id="liter_cost_v" > lei </td><td>Cât costă un litru</td><td> &nbsp; </td>
    <td valign="right"> <a href="http://www.ghidtransport.ro/stiri/pret-benzina-motorina.html" target="_blank">Vezi preţurile la carburanţi</a></td>
  </tr>
  <tr>
-  <td> C - consum </td><td><input type="text" maxlen="4" size="6" value="6.58" id="consumption_v" > l / 100 km </td><td>Cât crezi că va consuma maşina la suta de kilometri</td><td> &nbsp; </td>
+  <td> C - consum </td><td><input type="text" maxlen="4" size="6" value="7.56" id="consumption_v" > l / 100 km </td><td>Cât crezi că va consuma maşina la suta de kilometri</td><td> &nbsp; </td>
    <td valign="right"> </td>
  </tr>
  <tr>
@@ -127,7 +142,7 @@
    <td valign="right"> </td>
  </tr>
   <tr>
-   <td> PCD - cost combustibil</td><td><input type="text" maxlen="6" size="6" value="41.45" id="consumption_result_v" > lei </td><td>(bani disponibili pentru combustibil)</td><td> &nbsp; </td>
+   <td> PCD - cost combustibil</td><td><input type="text" maxlen="6" size="6" value="45.36" id="consumption_result_v" > lei </td><td>(bani disponibili pentru combustibil)</td><td> &nbsp; </td>
     <td align="right">&nbsp; &nbsp; &nbsp; &nbsp; </td>
   </tr>
   <tr>
@@ -142,38 +157,30 @@
     <td valign="right"> &nbsp; &nbsp; &nbsp; <input type="reset"  value="Resetează parametrii"  style="height: 20px; font-size: 8pt; "/></td>
   </tr>
   <tr>
-    <td> Persoane in masina</td>
+    <td> Persoane în mașină</td>
     <td><select id="select_people">
    			<option value="1" >1</option>
    			<option value="2" >2</option>
-   			<option value="3" >3</option>
+   			<option value="3" selected="selected" >3</option>
    			<option value="4" >4</option>
    			<option value="5" >5</option>
    		</select> </td>
-    <td><input type="text" maxlen="6" size="6" value="41.45" id="consum_pp" > lei</td><td> &nbsp; </td>
-    <td align="right">&nbsp; &nbsp; &nbsp; &nbsp; </td>
+    <td>Pasager(i): <span id="pas">2</span> &times; <input type="text" maxlen="6" size="6" value="16" id="consum_pp" > lei</td><td> &nbsp; </td>
+    <td align="right">&nbsp;  Șofer: &nbsp; <input type="text" maxlen="6" size="6" value="13.36" id="consum_ps" /> lei &nbsp; &nbsp; &nbsp; </td>
   </tr>
 </form>
  <tr>
-  <td colspan="10">Calculează distanţa parcursă pe pagina  &nbsp; &nbsp;
-    <b><a href="http://maps.google.ro/maps?saddr=Strada+S%C3%A2rguintei&daddr=46.5419911,24.5660123+to:Pia%C5%A3a+Republicii+to:46.54903,24.56969+to:Strada+Po%C8%99tei+to:Pia%C5%A3a+Republicii+to:Pia%C5%A3a+Republicii%2FDN15+to:46.549082,24.5646287+to:46.5416681,24.5659832+to:Strada+S%C3%A2rguintei&hl=ro&ie=UTF8&ll=46.543395,24.575515&spn=0.024854,0.066047&sll=46.545403,24.565902&sspn=0.024853,0.066047&geocode=FZQHxgIdHih3AQ%3BFacsxgId_Nh2ASktTnflSrZLRzHZnGlyGIKDXQ%3BFRlUxgIdtth2AQ%3BFSZIxgIdWud2ASmthLMFSLZLRzGsSwROlzqm_w%3BFbY-xgIdvNN2AQ%3BFXhTxgIdQ9h2AQ%3BFY9TxgIdBdt2AQ%3BFVpIxgIdlNN2ASkxTF8MN7ZLRzGacSXNuh9Rbg%3BFWQrxgId39h2ASkDGBrmSrZLRzHULB40WI4OjA%3BFWgHxgIdoih3AQ&vpsrc=0&mra=ls&via=1,3,7,8&t=h&z=15"  target="_blank">Google Maps</a> &nbsp;</b>
-   	 <!--&nbsp;  şi  &nbsp; &nbsp; -->
-	 <a style="display:none" href="http://link2.map24.com/?lid=32a3e713&maptype=&action=route&width=&rtype=fast&s=S%C3%A2rguin%C5%A3ei%2C+T%C3%A2rgu+Mure%C5%9F%2C+Rom%C3%A2nia&scountry=RO&d=Primariei%2C+T%C3%A2rgu+Mure%C5%9F%2C+Rom%C3%A2nia&dcountry=RO" target="_blank">NAVTEQ Map24</a></td>
+  <td colspan="10">
+	<br/><br/><br/><br/>
+	Calculează distanţa parcursă pe pagina  &nbsp; &nbsp;
+    	<b><a href="https://goo.gl/maps/YvXYLHPXsWB2"  target="_blank">Google Maps</a> &nbsp;</b>
+   	 &nbsp;  sau  &nbsp; &nbsp;  &nbsp; &nbsp;
+	<a style="adisplay:none" href="https://wego.here.com/directions/drive/Strada-S%C3%A2rguin%C8%9Bei-34,-540544-Targu-Mures,-Romania:loc-dmVyc2lvbj0xO3RpdGxlPVN0cmFkYStTJUMzJUEycmd1aW4lQzglOUJlaSslMjhTdHJhZGErUyVDMyVBMnJndWludGVpJTI5KzM0O2xhbmc9cm87bGF0PTQ2LjUzMjI0OTQ1MDY4MzU5NDtsb249MjQuNTg2ODYwNjU2NzM4Mjg7c3RyZWV0PVN0cmFkYStTJUMzJUEycmd1aW4lQzglOUJlaTtob3VzZT0zNDtjaXR5PVRhcmd1K011cmVzO3Bvc3RhbENvZGU9NTQwNTQ0O2NvdW50cnk9Uk9VO2Rpc3RyaWN0PVRhcmd1K011cmVzO2NvdW50eT1NdXJlJUM4JTk5O2NhdGVnb3J5SWQ9YnVpbGRpbmc7c291cmNlU3lzdGVtPWludGVybmFsO25sYXQ9NDYuNTMyMzYwMDc2OTA0MztubG9uPTI0LjU4Njg2MDY1NjczODI4/Strada-Romulus-Guga-15,-540203-Targu-Mures,-Romania:loc-dmVyc2lvbj0xO3RpdGxlPVN0cmFkYStSb211bHVzK0d1Z2ErMTU7bGFuZz1ybztsYXQ9NDYuNTQyNTYwNTc3MzkyNTg7bG9uPTI0LjUzOTQxOTE3NDE5NDMzNjtzdHJlZXQ9U3RyYWRhK1JvbXVsdXMrR3VnYTtob3VzZT0xNTtjaXR5PVRhcmd1K011cmVzO3Bvc3RhbENvZGU9NTQwMjAzO2NvdW50cnk9Uk9VO2Rpc3RyaWN0PVRhcmd1K011cmVzO2NvdW50eT1NdXJlJUM4JTk5O2NhdGVnb3J5SWQ9YnVpbGRpbmc7c291cmNlU3lzdGVtPWludGVybmFsO25sYXQ9NDYuNTQyNTY4MjA2Nzg3MTE7bmxvbj0yNC41MzkzNTA1MDk2NDM1NTU/DN1,-407280-Floresti,-Romania:46.75482,23.53397/Strada-Romulus-Guga-15,-540203-Targu-Mures,-Romania:loc-dmVyc2lvbj0xO3RpdGxlPVN0cmFkYStSb211bHVzK0d1Z2ErMTU7bGFuZz1ybztsYXQ9NDYuNTQyNTYwNTc3MzkyNTg7bG9uPTI0LjUzOTQxOTE3NDE5NDMzNjtzdHJlZXQ9U3RyYWRhK1JvbXVsdXMrR3VnYTtob3VzZT0xNTtjaXR5PVRhcmd1K011cmVzO3Bvc3RhbENvZGU9NTQwMjAzO2NvdW50cnk9Uk9VO2Rpc3RyaWN0PVRhcmd1K011cmVzO2NvdW50eT1NdXJlJUM4JTk5O2NhdGVnb3J5SWQ9YnVpbGRpbmc7c291cmNlU3lzdGVtPWludGVybmFsO25sYXQ9NDYuNTQyNTY4MjA2Nzg3MTE7bmxvbj0yNC41MzkzNTA1MDk2NDM1NTU/Strada-Mihai-Eminescu-60,-540331-Targu-Mures,-Romania:loc-dmVyc2lvbj0xO3RpdGxlPVN0cmFkYStNaWhhaStFbWluZXNjdSs2MDtsYW5nPXJvO2xhdD00Ni41NTEzNDk2Mzk4OTI1ODtsb249MjQuNTU3ODQ5ODg0MDMzMjAzO3N0cmVldD1TdHJhZGErTWloYWkrRW1pbmVzY3U7aG91c2U9NjA7Y2l0eT1UYXJndStNdXJlcztwb3N0YWxDb2RlPTU0MDMzMTtjb3VudHJ5PVJPVTtkaXN0cmljdD1UYXJndStNdXJlcztjb3VudHk9TXVyZSVDOCU5OTtjYXRlZ29yeUlkPWJ1aWxkaW5nO3NvdXJjZVN5c3RlbT1pbnRlcm5hbDtubGF0PTQ2LjU1MTM0OTYzOTg5MjU4O25sb249MjQuNTU3ODQ5ODg0MDMzMjAz/Strada-S%C3%A2rguin%C8%9Bei-34,-540544-Targu-Mures,-Romania:loc-dmVyc2lvbj0xO3RpdGxlPVN0cmFkYStTJUMzJUEycmd1aW4lQzglOUJlaSslMjhTdHJhZGErUyVDMyVBMnJndWludGVpJTI5KzM0O2xhbmc9cm87bGF0PTQ2LjUzMjI0OTQ1MDY4MzU5NDtsb249MjQuNTg2ODYwNjU2NzM4Mjg7c3RyZWV0PVN0cmFkYStTJUMzJUEycmd1aW4lQzglOUJlaTtob3VzZT0zNDtjaXR5PVRhcmd1K011cmVzO3Bvc3RhbENvZGU9NTQwNTQ0O2NvdW50cnk9Uk9VO2Rpc3RyaWN0PVRhcmd1K011cmVzO2NvdW50eT1NdXJlJUM4JTk5O2NhdGVnb3J5SWQ9YnVpbGRpbmc7c291cmNlU3lzdGVtPWludGVybmFsO25sYXQ9NDYuNTMyMzYwMDc2OTA0MztubG9uPTI0LjU4Njg2MDY1NjczODI4?map=46.59979,23.99926,10,normal&msg=Strada%20Romulus%20Guga%2015&avoid=carHOV"
+	    target="_blank">HERE WeGo</a>
+  </td>
  </tr>
 
 </table>
-<center>
-<br/>
-<a href="javascript: enableIframe();"  style="display:none">Calculează distanţa parcursă cu Google Maps în această pagină</a>
-<div id="iframe_div" style="display:none">
-	<iframe id="gm_iframe" width="850" height="580" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="about:blank"></iframe>
-	<br /><small><a id="gm_link" href="http://maps.google.ro/maps?saddr=Strada+S%C3%A2rguintei&amp;daddr=46.5419911,24.5660123+to:Pia%C5%A3a+Republicii+to:46.54903,24.56969+to:Strada+Po%C8%99tei+to:Pia%C5%A3a+Republicii+to:Pia%C5%A3a+Republicii%2FDN15+to:46.5490819,24.5646286+to:46.5416681,24.5659832+to:Strada+S%C3%A2rguintei&amp;hl=ro&amp;ie=UTF8&amp;sll=46.545403,24.565902&amp;sspn=0.024853,0.066047&amp;geocode=FZQHxgIdHih3AQ%3BFacsxgId_Nh2ASktTnflSrZLRzHZnGlyGIKDXQ%3BFRlUxgIdtth2AQ%3BFSZIxgIdWud2ASmthLMFSLZLRzGsSwROlzqm_w%3BFbY-xgIdvNN2AQ%3BFXhTxgIdQ9h2AQ%3BFY9TxgIdBdt2AQ%3BFVlIxgIdlNN2ASkxTF8MN7ZLRzGacSXNuh9Rbg%3BFWQrxgId39h2ASkDGBrmSrZLRzHULB40WI4OjA%3BFWgHxgIdoih3AQ&amp;vpsrc=6&amp;mra=ls&amp;via=1,3,7,8&amp;t=h&amp;ll=46.543395,24.575515&amp;spn=0.024854,0.066047&amp;output=embed">View Larger Map</a></small>
-	<br/><input type="text" size="86" id="iframe_address" value="" > <input type="button" value="go" onclick="changeIframeSrc();" />
-	<br/><a href="javascript: hideIframe();" >ascunde zona Google Maps</a>
-		 &nbsp; &nbsp; <a href="javascript: showIframe();" >arată zona Google Maps</a>
-		 &nbsp; &nbsp; <a href="javascript: disableIframe();" >dezactivează zona Google Maps</a>
-</div>
-</center>
 <br/><br/>
 
 <br/><br/>
