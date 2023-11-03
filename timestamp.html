@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<body>
+<h2>Current Timestamp:</h2>
+
+<p>MCS X-WP-Timestamp: <span id="timestampDate"></span></p>
+<script>
+const str = (new Date()).toISOString().replace(/[-:TZ]/g, "");
+document.getElementById("timestampDate").innerHTML = str;
+</script>
+
+<p>ISO Timestamp UTC(GMT): <span id="timestampISO"></span></p>
+<script>
+const timestampISO = (new Date()).toISOString();
+document.getElementById("timestampISO").innerHTML = timestampISO;
+</script>
+
+<p>Long Timestamp: <span id="timestampLong"></span></p>
+<script>
+const timestampLong = (new Date()).getTime().toString();
+document.getElementById("timestampLong").innerHTML = timestampLong;
+</script>
+
+<p>JavaScript Date toString: <span id="jsDate"></span></p>
+<script>
+const jsDate = (new Date());
+document.getElementById("jsDate").innerHTML = jsDate;
+</script>
+
+<p> &nbsp; </p>
+<p>
+Useful links: 
+<br/><a href="https://www.worldtimebuddy.com/?pl=1&lid=30,683506,2643743,100,6,5&h=683506&hf=1" target="_blank">World Time Buddy</a>
+<br/><a href="https://www.w3schools.com/html/tryit.asp?filename=tryhtml_default" target="_blank">w3schools.com HTML try it yourself</a>
+</p>
+</body>
+</html>
