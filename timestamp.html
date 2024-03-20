@@ -4,9 +4,13 @@
 <h2>Current Timestamp:</h2>
 
 <p>MCS X-WP-Timestamp: <span id="timestampDate"></span></p>
+<p>just Timestamp beginning: <span id="timestampDateBegin"></span></p>
 <script>
 const str = (new Date()).toISOString().replace(/[-:TZ]/g, "");
 document.getElementById("timestampDate").innerHTML = str;
+const idx = str.indexOf(".");
+const begin = str.substring(0, idx);
+document.getElementById("timestampDateBegin").innerHTML = begin;
 </script>
 
 <p>ISO Timestamp UTC(GMT): <span id="timestampISO"></span></p>
@@ -23,7 +27,7 @@ document.getElementById("timestampLong").innerHTML = timestampLong;
 
 <p>JavaScript Date toString: <span id="jsDate"></span></p>
 <script>
-const jsDate = (new Date());
+const jsDate = new Date();
 document.getElementById("jsDate").innerHTML = jsDate;
 </script>
 
